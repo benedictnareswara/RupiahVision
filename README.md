@@ -5,8 +5,30 @@ camera at a note and the app speaks its denomination in Indonesian. If it isn't 
 stays silent or says "Tidak dikenali" (not recognized), never a guess. The app runs fully in the
 browser as an installable web app (PWA), so trying it needs only a link.
 
-> **Status:** v1 in progress ([PLAN.md](PLAN.md)). The model is trained on public datasets; the
-> phone app comes next. Results below appear only once a script has produced them.
+> **Status:** v1 ([PLAN.md](PLAN.md)). The model is trained on public datasets and runs in the
+> browser. It has not yet been tested by blind or low-vision users.
+
+## How the app works
+
+1. **Tap anywhere to start.** iOS only allows speech and sound after a tap, so this one tap is
+   needed. After it, the app is hands-free.
+2. The back camera runs continuously. About 6 times a second, the app takes the centre square of
+   the frame and runs the model on the phone itself, with
+   [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/) (WebAssembly). No image leaves
+   the phone, and after the first visit it works offline.
+3. **Aiming:** soft ticks speed up as the model becomes more sure it sees a note. Android phones
+   also vibrate; iOS Safari has no vibration API.
+4. **Speaking:** a denomination is announced only when 3 of the last 5 frames are confident
+   about the same one (calibrated probability at or above the threshold below). It's said once
+   in Indonesian (*"Lima puluh ribu rupiah"*), after a short rising tone. It's said again only
+   when a different note appears, or when the same note returns after leaving the frame. Tap
+   anywhere to repeat it.
+5. If the picture is too dark to use, it says *"Terlalu gelap"* (too dark), at most every 6
+   seconds. With no confident note, it says nothing.
+
+Options: English speech, aiming sounds on/off, and **screen reader mode**. In that mode,
+announcements go to VoiceOver or TalkBack through a live region instead of the speech engine,
+so the two never talk over each other.
 
 ## What it recognizes
 
@@ -126,7 +148,7 @@ banknote images the app announces. **Risk** is the share of announcements that w
 |---|---|---|---|---|---|---|---|---|---|---|
 | `custom_cnn` | 0.98 M | 4.0 MB | 89.6% | 88.6% (76.1%–97.9%) | 88.7% (76.3%–97.0%) | 0.87 | 63.7% | 2.0% (4/202) | 0.0% (0/15) | 6.4 (6.8) |
 | `mobilenet_v3_small` | 1.53 M | 6.4 MB | 96.1% | 97.6% (88.1%–100.0%) | 97.9% (88.7%–100.0%) | 0.83 | 95.6% | 1.0% (3/303) | 0.0% (0/15) | 2.2 (2.5) |
-| `mobilenet_v3_large` | 4.21 M | 17.2 MB | 97.9% | 99.1% (90.5%–100.0%) | 99.2% (90.7%–100.0%) | 0.49 | 99.7% | 0.9% (3/316) | 0.0% (0/15) | 5.6 (6.3) |
+| `mobilenet_v3_large` | 4.21 M | 17.2 MB | 97.9% | 99.1% (90.5%–100.0%) | 99.2% (90.7%–100.0%) | 0.49 | 99.7% | 0.9% (3/316) | 0.0% (0/15) | 5.4 (6.0) |
 
 CPU latency: ONNX Runtime from Python on Apple M1 Pro, one image.
 <!-- END GENERATED: models -->
@@ -147,6 +169,19 @@ Selected model (best validation accuracy): `mobilenet_v3_large`.
 
 ![Confusion matrix](results/eval/mobilenet_v3_large_confusion.png)
 <!-- END GENERATED: per_class -->
+
+### In-browser latency
+
+Measured by the app itself: open `/?bench`, run it, and save the JSON into
+[`results/bench/`](results/bench/). This runs the same path as the app (crop, tensor, ONNX
+Runtime Web, single-threaded WebAssembly) on a synthetic frame: 10 warm-up runs, then 50 timed.
+
+<!-- BEGIN GENERATED: bench -->
+| Device | Inference ms median (p95) | Preprocess ms median (p95) | Model load ms | Model, runtime |
+|---|---|---|---|---|
+| MacBook Pro M1 Pro, Chromium | 21.9 (22.4) | 1.3 (1.5) | 235 | `mobilenet_v3_large`, onnxruntime-web wasm |
+| iPhone, Safari | not measured | not measured | not measured | - |
+<!-- END GENERATED: bench -->
 
 ## Repository layout
 

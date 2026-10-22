@@ -13,7 +13,7 @@ from rupiahvision import public
 from rupiahvision.data.inventory import read_csv
 from rupiahvision.reporting import readme_tables
 from rupiahvision.training.evaluate import evaluate
-from rupiahvision.training.export import export
+from rupiahvision.training.export import export, publish
 from rupiahvision.training.train import TrainConfig, train
 
 DENOMINATIONS = ("1000", "50000", "100000")
@@ -181,6 +181,9 @@ def test_train_evaluate_export(imported, model):
     session = ort.InferenceSession(str(out / "models" / model / "model.onnx"))
     logits = session.run(["logits"], {"input": np.zeros((1, 3, 64, 64), np.float32)})[0]
     assert logits.shape == (1, 8)
+
+    publish(model, out / "models", out / "web")
+    assert {p.name for p in (out / "web").iterdir()} == {"model.onnx", "model.json"}
 
     # The README tables render from these results (out/ has the repo's results/ layout).
     assert f"`{model}`" in readme_tables.models_table(out)

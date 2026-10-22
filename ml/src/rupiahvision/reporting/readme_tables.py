@@ -227,12 +227,42 @@ def per_class_table(repo_root: Path) -> str:
     )
 
 
+# Devices the plan says to measure on; a row stays "not measured" until its JSON exists.
+BENCH_DEVICES = {
+    "mac-m1pro-chromium": "MacBook Pro M1 Pro, Chromium",
+    "iphone-safari": "iPhone, Safari",
+}
+
+
+def bench_table(repo_root: Path) -> str:
+    rows = []
+    for stem, device in BENCH_DEVICES.items():
+        bench = load_json(repo_root / "results" / "bench" / f"{stem}.json")
+        if bench is None:
+            rows.append((device, "not measured", "not measured", "not measured", "-"))
+            continue
+        inference, preprocess = bench["inference_ms"], bench["preprocess_ms"]
+        rows.append(
+            (
+                device,
+                f"{inference['median']} ({inference['p95']})",
+                f"{preprocess['median']} ({preprocess['p95']})",
+                bench["load_ms"],
+                f"`{bench['model']}`, {bench['backend']}",
+            )
+        )
+    headers = ["Device", "Inference ms median (p95)", "Preprocess ms median (p95)",
+               "Model load ms", "Model, runtime"]  # fmt: skip
+    return markdown_table(headers, rows)
+
+
 TABLES: dict[str, Callable[[Path], str]] = {
     "classes": classes_table,
     "dataset": dataset_table,
     "public_dataset": public_dataset_table,
     "models": models_table,
     "per_class": per_class_table,
+    "bench": bench_table,
 }
 
 

@@ -22,10 +22,13 @@ data/downloads/
 *.mp4
 !results/**/*.png
 !docs/**/*.png
+!web/public/icons/*.png
 models/
 *.pt
 *.pth
 *.onnx
+# The published app model is committed so the site can be built and deployed.
+!web/public/model/model.onnx
 
 # OS / editors
 .DS_Store

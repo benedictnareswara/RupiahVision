@@ -1,44 +1,135 @@
 :root {
-  --bg: #ffffff;
-  --fg: #111111;
+  --bg: #000000;
+  --fg: #ffffff;
+  --muted: #d0d0d0;
+  --accent: #ffd60a;
+  --panel: rgba(0, 0, 0, 0.62);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000000;
-    --fg: #ffffff;
-  }
+  color-scheme: dark;
 }
 
 html,
 body,
 #root {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
   background: var(--bg);
   color: var(--fg);
 }
 
 .app {
-  min-height: 100dvh;
-  padding: 24px 16px;
-  box-sizing: border-box;
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* The camera picture, for sighted helpers and low-vision users. */
+.camera {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The whole screen is one button: no aiming at small targets. */
+.tap-area {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  padding: 24px 16px 140px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 16px;
+  background: linear-gradient(transparent 0%, var(--panel) 35%, var(--panel) 65%, transparent);
+  color: var(--fg);
+  font: inherit;
   text-align: center;
+  cursor: pointer;
 }
 
-h1 {
-  font-size: 2rem;
-  margin: 0 0 16px;
+.tap-area:focus-visible {
+  outline: 6px solid var(--accent);
+  outline-offset: -6px;
 }
 
-/* Large, high-contrast text for low-vision users. */
+.headline {
+  font-size: clamp(2.5rem, 12vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
 .status {
   font-size: 1.5rem;
   line-height: 1.4;
-  margin: 0;
+  max-width: 30ch;
+}
+
+.hint {
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.settings {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.settings button,
+.settings label {
+  min-height: 48px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 24px;
+  border: 2px solid var(--fg);
+  background: var(--panel);
+  color: var(--fg);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.settings input {
+  width: 22px;
+  height: 22px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.bench {
+  padding: 24px 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.bench button {
+  min-height: 48px;
+  padding: 0 20px;
+  font: inherit;
+  margin: 8px 8px 8px 0;
+}
+
+.bench pre {
+  overflow-x: auto;
+  background: #1a1a1a;
+  padding: 12px;
 }

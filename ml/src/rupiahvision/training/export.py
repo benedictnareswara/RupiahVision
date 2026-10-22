@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import platform
+import shutil
 import subprocess
 import time
 from collections.abc import Sequence
@@ -34,6 +35,7 @@ from rupiahvision.training.evaluate import EVAL_DIR, load_checkpoint
 from rupiahvision.training.train import MODELS_DIR
 
 EXPORT_DIR = REPO_ROOT / "results" / "export"
+WEB_MODEL_DIR = REPO_ROOT / "web" / "public" / "model"
 OPSET = 18
 PARITY_TOLERANCE = 1e-3
 
@@ -151,10 +153,22 @@ def export(
     return result
 
 
+def publish(run: str, models_dir: Path = MODELS_DIR, web_dir: Path = WEB_MODEL_DIR) -> None:
+    """Copy an exported model and its metadata into the web app (served as model/...)."""
+    web_dir.mkdir(parents=True, exist_ok=True)
+    for name in ("model.onnx", "model.json"):
+        shutil.copy2(models_dir / run / name, web_dir / name)
+    print(f"Published {run} to {web_dir}")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Export a trained v1 model to ONNX.")
     parser.add_argument("--run", required=True)
-    export(parser.parse_args(argv).run)
+    parser.add_argument("--publish", action="store_true", help="also copy it into the web app")
+    args = parser.parse_args(argv)
+    export(args.run)
+    if args.publish:
+        publish(args.run)
     return 0
 
 
