@@ -13,5 +13,7 @@ to fill these in.
 | `sessions.csv` | hand | one row per capture session, including its split |
 | `clips.csv` | hand | one row per recorded video or photo |
 | `subject_roles.csv` | `splits plan` | which splits each note/object may appear in |
-| `manifest.csv` | frame extraction (next M1 step) | one row per image, with its dHash |
+| `manifest.csv` | `rupiahvision.data.frames` | one row per image, with its dHash |
+| `public_<dataset>.csv` | public import (planned) | public images in manifest format, train only |
+| `SOURCES.md` | hand | audit of public datasets: licenses, counts, what's usable |
 | `splits.csv` | `splits make` | the split of every image |

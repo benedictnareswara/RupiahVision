@@ -171,9 +171,19 @@ After each capture day, from `ml/`:
 
 ```bash
 uv run python -m rupiahvision.data.splits plan    # only if you added notes or objects
+uv run python -m rupiahvision.data.frames         # extract frames, rebuild manifest.csv
 uv run python -m rupiahvision.data.splits make    # assign splits, check for leaks
 uv run pytest                                     # also validates every CSV
 ```
+
+Frame extraction samples 2 frames per second from each video and drops frames that look
+the same as the one before (the phone held still). Frames are saved to `data/frames/`,
+with the longer side scaled to 1024 px. Clips that were already extracted are skipped, so
+re-running is quick. If any clip can't be read, nothing is written and the error names it.
+
+Videos are the main format. Photos also work as JPEG or PNG. iPhone photos are HEIC by
+default, which OpenCV can't read: set **Settings > Camera > Formats > Most Compatible**
+before taking stills.
 
 Commit the CSV files and `results/data/dataset_summary.json`. Never commit images.
 
