@@ -1,0 +1,207 @@
+{
+  "classes": [
+    {
+      "denomination": 1000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 1000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 2000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 2000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 5000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 5000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 10000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 10000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 20000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 20000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 50000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 50000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 100000,
+      "series": "TE2016",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    },
+    {
+      "denomination": 100000,
+      "series": "TE2022",
+      "notes": 0,
+      "planned_roles": {},
+      "level": "no_notes",
+      "own_images": {
+        "train": 0,
+        "val": 0,
+        "test": 0
+      },
+      "public_images": 0
+    }
+  ],
+  "negatives": {
+    "objects": 0,
+    "object_types": [],
+    "open_set_object_types": [],
+    "images": {
+      "train": 0,
+      "val": 0,
+      "test": 0
+    }
+  },
+  "sessions": {
+    "train": 0,
+    "val": 0,
+    "test": 0
+  },
+  "total_images": {
+    "train": 0,
+    "val": 0,
+    "test": 0
+  },
+  "warnings": []
+}

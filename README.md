@@ -27,6 +27,43 @@ This table is generated from [`data/labels.json`](data/labels.json):
 | (no note / not confident) | - | Tidak dikenali | Not recognized |
 <!-- END GENERATED: classes -->
 
+## Dataset
+
+Photos of real notes, taken following the [capture protocol](docs/data-collection.md). Splits
+are made per physical note and per capture session, never per random image, so the test set
+shows notes, places and lighting the model never trained on. Public-dataset images are used
+for training only, because there's no way to tell which physical note each one shows.
+
+**Test separation**, measured from the images rather than the plan:
+
+- **note-disjoint**: every test note is a physical note that never appears in train or val.
+- **test note-disjoint, val by session**: the same, except val reuses the training note in
+  other sessions (classes with only two notes).
+- **session only**: the class has one note, so train, val and test differ only by session.
+  Accuracy for these classes is likely optimistic.
+
+<!-- BEGIN GENERATED: dataset -->
+| Denomination | Series | Notes | Test separation | Train | Val | Test | Public (train only) |
+|---|---|---|---|---|---|---|---|
+| Rp1.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp1.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp2.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp2.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp5.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp5.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp10.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp10.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp20.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp20.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp50.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp50.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp100.000 | TE2016 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| Rp100.000 | TE2022 | 0 | no notes yet | 0 | 0 | 0 | 0 |
+| unknown (no note) | - | 0 objects | - | 0 | 0 | 0 | - |
+
+Total: 0 train / 0 val / 0 test images from 0 / 0 / 0 capture sessions.
+<!-- END GENERATED: dataset -->
+
 ## Results
 
 No results yet. Every number that appears here will be generated from a JSON file in
@@ -56,10 +93,20 @@ npm run dev               # local dev server
 
 ## Reproducing
 
+All commands run from `ml/`.
+
+Rebuild the dataset splits and check them for leaks (writes `data/splits.csv` and
+`results/data/dataset_summary.json`):
+
+```bash
+uv run python -m rupiahvision.data.splits make
+```
+
 Regenerate the README tables from the files in the repo:
 
 ```bash
-cd ml && uv run python -m rupiahvision.reporting.readme_tables
+uv run python -m rupiahvision.reporting.readme_tables
 ```
 
-CI runs the same command with `--check` and fails if the README is out of date.
+CI runs `splits check` and `readme_tables --check`, and fails if either the splits or the
+README are out of date.

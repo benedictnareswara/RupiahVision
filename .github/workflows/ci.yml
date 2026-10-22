@@ -28,6 +28,8 @@ jobs:
         run: uv run ruff format --check .
       - name: Test
         run: uv run pytest
+      - name: Dataset splits are up to date and leak-free
+        run: uv run python -m rupiahvision.data.splits check
       - name: README tables match the repo
         run: uv run python -m rupiahvision.reporting.readme_tables --check
 

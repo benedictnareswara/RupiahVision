@@ -17,6 +17,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from collections.abc import Callable, Sequence
@@ -46,7 +47,7 @@ def classes_table(repo_root: Path) -> str:
     schema = load_schema(repo_root / "data" / "labels.json")
     rows = [
         (
-            f"Rp{d:,}".replace(",", "."),
+            rupiah(d),
             ", ".join(schema.series),
             schema.speech["id-ID"][str(d)],
             schema.speech["en-US"][str(d)],
@@ -64,8 +65,64 @@ def classes_table(repo_root: Path) -> str:
     return markdown_table(["Denomination", "Series", "Spoken (id-ID)", "Spoken (en-US)"], rows)
 
 
+# How independent a class's test images are; see rupiahvision.data.splits.
+SEPARATION_LEVELS = {
+    "note_disjoint": "note-disjoint",
+    "val_by_session": "test note-disjoint, val by session",
+    "session_only": "**session only**",
+    "no_test_data": "no test images",
+    "no_notes": "no notes yet",
+}
+
+
+def rupiah(amount: int) -> str:
+    return f"Rp{amount:,}".replace(",", ".")
+
+
+def dataset_table(repo_root: Path) -> str:
+    summary = json.loads(
+        (repo_root / "results" / "data" / "dataset_summary.json").read_text(encoding="utf-8")
+    )
+    rows = [
+        (
+            rupiah(c["denomination"]),
+            c["series"],
+            c["notes"],
+            SEPARATION_LEVELS[c["level"]],
+            c["own_images"]["train"],
+            c["own_images"]["val"],
+            c["own_images"]["test"],
+            c["public_images"],
+        )
+        for c in summary["classes"]
+    ]
+    negatives = summary["negatives"]
+    rows.append(
+        (
+            "unknown (no note)",
+            "-",
+            f"{negatives['objects']} objects",
+            "-",
+            negatives["images"]["train"],
+            negatives["images"]["val"],
+            negatives["images"]["test"],
+            "-",
+        )
+    )
+    totals = summary["total_images"]
+    sessions = summary["sessions"]
+    footer = (
+        f"\nTotal: {totals['train']} train / {totals['val']} val / {totals['test']} test images "
+        f"from {sessions['train']} / {sessions['val']} / {sessions['test']} capture sessions.\n"
+    )
+    headers = ["Denomination", "Series", "Notes", "Test separation", "Train", "Val", "Test",
+               "Public (train only)"]  # fmt: skip
+    return markdown_table(headers, rows) + footer
+
+
 TABLES: dict[str, Callable[[Path], str]] = {
     "classes": classes_table,
+    "dataset": dataset_table,
 }
 
 

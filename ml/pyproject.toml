@@ -5,6 +5,7 @@ description = "Indonesian Rupiah banknote recognition: data, training, evaluatio
 requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.0",
+    "opencv-python-headless>=4.10",
 ]
 
 [dependency-groups]

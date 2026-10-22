@@ -1,0 +1,7 @@
+{
+  "seed": 20261022,
+  "val_fraction": 0.2,
+  "test_fraction": 0.2,
+  "open_set_object_types": [],
+  "max_dhash_distance": 4
+}
