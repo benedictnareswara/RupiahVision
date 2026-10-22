@@ -35,5 +35,5 @@ models/
 .idea/
 .vscode/
 
-# Local Claude Code settings
+# Local tool settings
 .claude/
