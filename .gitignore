@@ -34,3 +34,6 @@ models/
 .DS_Store
 .idea/
 .vscode/
+
+# Local Claude Code settings
+.claude/
