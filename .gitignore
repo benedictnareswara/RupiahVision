@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+web/dist/
+
+# Data and models: images and weights are never committed (see PLAN.md, section 3)
+data/raw/
+data/frames/
+data/public/
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.mov
+*.mp4
+!results/**/*.png
+!docs/**/*.png
+models/
+*.pt
+*.pth
+*.onnx
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

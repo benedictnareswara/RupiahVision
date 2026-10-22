@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "unknown_class": "unknown",
+  "denominations": [1000, 2000, 5000, 10000, 20000, 50000, 100000],
+  "series": ["TE2016", "TE2022"],
+  "sides": ["front", "back"],
+  "classes": [
+    "unknown",
+    "1000_TE2016_front", "1000_TE2016_back", "1000_TE2022_front", "1000_TE2022_back",
+    "2000_TE2016_front", "2000_TE2016_back", "2000_TE2022_front", "2000_TE2022_back",
+    "5000_TE2016_front", "5000_TE2016_back", "5000_TE2022_front", "5000_TE2022_back",
+    "10000_TE2016_front", "10000_TE2016_back", "10000_TE2022_front", "10000_TE2022_back",
+    "20000_TE2016_front", "20000_TE2016_back", "20000_TE2022_front", "20000_TE2022_back",
+    "50000_TE2016_front", "50000_TE2016_back", "50000_TE2022_front", "50000_TE2022_back",
+    "100000_TE2016_front", "100000_TE2016_back", "100000_TE2022_front", "100000_TE2022_back"
+  ],
+  "speech": {
+    "id-ID": {
+      "unknown": "Tidak dikenali",
+      "1000": "Seribu rupiah",
+      "2000": "Dua ribu rupiah",
+      "5000": "Lima ribu rupiah",
+      "10000": "Sepuluh ribu rupiah",
+      "20000": "Dua puluh ribu rupiah",
+      "50000": "Lima puluh ribu rupiah",
+      "100000": "Seratus ribu rupiah"
+    },
+    "en-US": {
+      "unknown": "Not recognized",
+      "1000": "One thousand rupiah",
+      "2000": "Two thousand rupiah",
+      "5000": "Five thousand rupiah",
+      "10000": "Ten thousand rupiah",
+      "20000": "Twenty thousand rupiah",
+      "50000": "Fifty thousand rupiah",
+      "100000": "One hundred thousand rupiah"
+    }
+  },
+  "conditions": {
+    "state": ["flat", "folded_half", "folded_quarter", "crumpled", "covered"],
+    "wear": ["new", "used", "worn"],
+    "lighting": ["daylight", "indoor_warm", "dim", "backlit", "glare"],
+    "background": ["plain", "cluttered", "patterned", "handheld"]
+  }
+}
