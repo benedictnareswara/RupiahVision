@@ -1,0 +1,15 @@
+{
+  "run": "mobilenet_v3_large",
+  "onnx_bytes": 17160493,
+  "opset": 18,
+  "max_abs_logit_difference": 2.8133392333984375e-05,
+  "cpu_latency_ms": {
+    "median": 5.554916999699344,
+    "p95": 6.324560450093486,
+    "runs": 100
+  },
+  "measured_on": {
+    "cpu": "Apple M1 Pro",
+    "runtime": "onnxruntime 1.31.0 (Python, CPU)"
+  }
+}

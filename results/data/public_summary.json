@@ -1,0 +1,70 @@
+{
+  "labels": {
+    "unknown": {
+      "train": 78,
+      "val": 18,
+      "test": 15
+    },
+    "1000": {
+      "train": 163,
+      "val": 61,
+      "test": 44
+    },
+    "2000": {
+      "train": 127,
+      "val": 67,
+      "test": 47
+    },
+    "5000": {
+      "train": 207,
+      "val": 51,
+      "test": 45
+    },
+    "10000": {
+      "train": 242,
+      "val": 55,
+      "test": 49
+    },
+    "20000": {
+      "train": 184,
+      "val": 43,
+      "test": 40
+    },
+    "50000": {
+      "train": 227,
+      "val": 50,
+      "test": 47
+    },
+    "100000": {
+      "train": 200,
+      "val": 41,
+      "test": 45
+    }
+  },
+  "datasets": {
+    "kaggle_rupiah22": {
+      "train": 489,
+      "val": 125,
+      "test": 107
+    },
+    "roboflow_bangkit": {
+      "train": 939,
+      "val": 261,
+      "test": 225
+    }
+  },
+  "groups": {
+    "train": 145,
+    "val": 35,
+    "test": 45
+  },
+  "total": {
+    "train": 1428,
+    "val": 386,
+    "test": 332
+  },
+  "notes": [
+    "dropped 8 test image(s) near-duplicating train",
+    "dropped 19 val image(s) near-duplicating train"
+  ]
+}

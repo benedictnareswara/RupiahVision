@@ -120,9 +120,119 @@ def dataset_table(repo_root: Path) -> str:
     return markdown_table(headers, rows) + footer
 
 
+def not_measured(command: str) -> str:
+    return f"_Not measured yet. Produced by `{command}`._\n"
+
+
+def load_json(path: Path) -> dict | None:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def public_dataset_table(repo_root: Path) -> str:
+    summary = load_json(repo_root / "results" / "data" / "public_summary.json")
+    if summary is None:
+        return not_measured("python -m rupiahvision.public split")
+    rows = [(label, *counts.values()) for label, counts in summary["labels"].items()]
+    rows.append(("**total**", *summary["total"].values()))
+    rows.append(("photo groups", *summary["groups"].values()))
+    notes = "".join(f"\n- {note}" for note in summary["notes"])
+    return markdown_table(["Label", "Train", "Val", "Test"], rows) + (
+        f"\nNear-duplicate check:{notes}\n" if notes else ""
+    )
+
+
+def pct(value: float | None) -> str:
+    return "-" if value is None else f"{100 * value:.1f}%"
+
+
+def pct_ci(value: float, ci: list[float]) -> str:
+    return f"{pct(value)} ({pct(ci[0])}–{pct(ci[1])})"
+
+
+def evaluated_runs(repo_root: Path) -> list[tuple[dict, dict | None, dict | None]]:
+    """(eval, export, training run) for every evaluated model, ordered by parameter count."""
+    out = []
+    for path in sorted((repo_root / "results" / "eval").glob("*.json")):
+        result = load_json(path)
+        run = result["run"]
+        out.append(
+            (
+                result,
+                load_json(repo_root / "results" / "export" / f"{run}.json"),
+                load_json(repo_root / "results" / "runs" / f"{run}.json"),
+            )
+        )
+    return sorted(out, key=lambda t: t[0]["parameters"])
+
+
+def said_on_no_note(test: dict) -> str:
+    """False-announcement rate on no-note images, with the count it rests on."""
+    n = next(c["n"] for c in test["per_class"] if c["label"] == "unknown")
+    rate = test["selective"]["false_announcement_rate_on_unknown"]
+    return f"{pct(rate)} ({round(rate * n)}/{n})"
+
+
+def models_table(repo_root: Path) -> str:
+    runs = evaluated_runs(repo_root)
+    if not runs:
+        return not_measured("python -m rupiahvision.training.evaluate --run <model>")
+    rows = []
+    for result, exported, trained in runs:
+        test, selective = result["test"], result["test"]["selective"]
+        latency = exported["cpu_latency_ms"] if exported else None
+        rows.append(
+            (
+                f"`{result['run']}`",
+                f"{result['parameters'] / 1e6:.2f} M",
+                f"{exported['onnx_bytes'] / 1e6:.1f} MB" if exported else "not measured",
+                pct(trained["best"]["val_accuracy"]) if trained else "not measured",
+                pct_ci(test["accuracy"], test["accuracy_ci95"]),
+                pct_ci(test["macro_accuracy"], test["macro_accuracy_ci95"]),
+                f"{result['calibration']['threshold']:.2f}",
+                pct(selective["coverage"]),
+                f"{pct(selective['risk'])} ({selective['wrong_announcements']}"
+                f"/{selective['announcements']})",
+                said_on_no_note(test),
+                f"{latency['median']:.1f} ({latency['p95']:.1f})" if latency else "not measured",
+            )
+        )
+    headers = ["Model", "Params", "ONNX", "Val acc", "Test acc (95% CI)", "Macro acc (95% CI)",
+               "Threshold", "Coverage", "Risk (wrong/said)", "Said on no-note",
+               "CPU ms median (p95)"]  # fmt: skip
+    cpu = next((e["measured_on"]["cpu"] for _, e, _ in runs if e), None)
+    footer = f"\nCPU latency: ONNX Runtime from Python on {cpu}, one image.\n" if cpu else ""
+    return markdown_table(headers, rows) + footer
+
+
+def selected_run(repo_root: Path) -> dict | None:
+    """The model with the best *validation* accuracy; test results never pick the model."""
+    runs = [(r, t) for r, _, t in evaluated_runs(repo_root) if t]
+    return max(runs, key=lambda rt: rt[1]["best"]["val_accuracy"])[0] if runs else None
+
+
+def per_class_table(repo_root: Path) -> str:
+    result = selected_run(repo_root)
+    if result is None:
+        return not_measured("python -m rupiahvision.training.evaluate --run <model>")
+    rows = [
+        (c["label"], c["n"], c["groups"], pct_ci(c["accuracy"], c["ci95"]) if c["n"] else "-")
+        for c in result["test"]["per_class"]
+    ]
+    header = f"Selected model (best validation accuracy): `{result['run']}`.\n\n"
+    confusion = f"\n![Confusion matrix](results/eval/{result['run']}_confusion.png)\n"
+    return (
+        header
+        + markdown_table(["Label", "Test images", "Photo groups", "Accuracy (95% CI)"], rows)
+        + confusion
+    )
+
+
 TABLES: dict[str, Callable[[Path], str]] = {
     "classes": classes_table,
     "dataset": dataset_table,
+    "public_dataset": public_dataset_table,
+    "models": models_table,
+    "per_class": per_class_table,
 }
 
 

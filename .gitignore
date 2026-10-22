@@ -13,6 +13,7 @@ web/dist/
 data/raw/
 data/frames/
 data/public/
+data/downloads/
 *.jpg
 *.jpeg
 *.png

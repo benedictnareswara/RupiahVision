@@ -4,8 +4,14 @@ version = "0.1.0"
 description = "Indonesian Rupiah banknote recognition: data, training, evaluation and export"
 requires-python = ">=3.12"
 dependencies = [
+    "matplotlib>=3.11.2",
     "numpy>=2.0",
+    "onnx>=1.23.2",
+    "onnxruntime>=1.31.0",
+    "onnxscript>=0.7.2",
     "opencv-python-headless>=4.10",
+    "torch>=2.14.1",
+    "torchvision>=0.29.1",
 ]
 
 [dependency-groups]
@@ -31,3 +37,14 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+
+# CI runs on Linux without a GPU: take PyTorch's CPU-only wheels there instead of the
+# multi-GB CUDA build. macOS keeps the PyPI wheels, which include Apple GPU (MPS) support.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+torchvision = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]

@@ -17,6 +17,15 @@ Rules for every milestone:
 - README tables are generated from those JSON files, and CI fails if the README and the JSON disagree.
 - We never write estimated or placeholder numbers. A table cell with no measurement yet says "not measured".
 
+### Scope change (2026-10-22): public data first
+
+To get a working model sooner, v1 trains on public data instead of waiting for our own photos:
+
+- **Data:** Kaggle [rupiah banknotes 2022](https://www.kaggle.com/datasets/fzmhww8782/rupiah-22) plus Roboflow [Uang Rupiah Emisi 2022](https://universe.roboflow.com/bangkit-poc9z/uang-rupiah-emisi-2022-bw0in) (CC BY 4.0). The Kaggle license is unknown, so we train on it but never commit or redistribute its images. See `data/SOURCES.md`.
+- **Labels:** 7 denominations + `unknown` (8 classes). The public sets don't label series or side.
+- **Splits:** by photo group (consecutive shots, and all augmented copies of one original, stay together), with a dHash check across splits. This is weaker than a by-physical-note split. Test images come from the same datasets, and probably the same notes, as training, so **test accuracy will be optimistic**. The README states this next to every number.
+- **Own photos:** the M1 tooling (inventory, sessions, note-disjoint splits) stays as v2. It is the only way to get an independent test set.
+
 ---
 
 ## 1. Target platform: recommend **(b) PWA**
