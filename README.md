@@ -176,11 +176,17 @@ Measured by the app itself: open `/?bench`, run it, and save the JSON into
 [`results/bench/`](results/bench/). This runs the same path as the app (crop, tensor, ONNX
 Runtime Web, single-threaded WebAssembly) on a synthetic frame: 10 warm-up runs, then 50 timed.
 
+- **Model load** isn't comparable between rows. The iPhone figure is a first visit to the live
+  site, so it includes downloading about 31 MB (model and WebAssembly runtime); later visits
+  load from the phone's cache. The Mac figure came from a local development server.
+- **Safari rounds its timer to 1 ms** on pages that aren't cross-origin isolated (GitHub Pages
+  can't send the headers needed), so iPhone times are whole milliseconds.
+
 <!-- BEGIN GENERATED: bench -->
 | Device | Inference ms median (p95) | Preprocess ms median (p95) | Model load ms | Model, runtime |
 |---|---|---|---|---|
 | MacBook Pro M1 Pro, Chromium | 21.9 (22.4) | 1.3 (1.5) | 235 | `mobilenet_v3_large`, onnxruntime-web wasm |
-| iPhone, Safari | not measured | not measured | not measured | - |
+| iPhone, Safari | 15 (16) | 3 (3) | 22798 | `mobilenet_v3_large`, onnxruntime-web wasm |
 <!-- END GENERATED: bench -->
 
 ## Repository layout
